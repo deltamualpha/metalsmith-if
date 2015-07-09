@@ -1,0 +1,33 @@
+{
+  "name": "metalsmith-if",
+  "version": "0.0.1",
+  "description": "A Metalsmith plugin that allows you to execute another plugin conditionally.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deltamualpha/metalsmith-if"
+  },
+  "keywords": [
+    "metalsmith",
+    "branch",
+    "if",
+    "conditional",
+    "plugin"
+  ],
+  "author": "David Ashby",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deltamualpha/metalsmith-if/issues"
+  },
+  "homepage": "https://github.com/deltamualpha/metalsmith-if",
+  "dependencies": {
+    "debug": "^2.2.0"
+  },
+  "devDependencies": {
+    "mocha": "1.x",
+    "metalsmith": "^1.7.0"
+  }
+}
