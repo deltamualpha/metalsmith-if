@@ -1,0 +1,60 @@
+{
+  "ecmaFeatures": {
+    "jsx": true,
+    "modules": true
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "parser": "babel-eslint",
+  "globals": {
+    "__TEST__": true,
+    "Highcharts": true,
+    "Modernizr": true,
+    "__dirname": true,
+    "afterEach": true,
+    "beforeEach": true,
+    "define": true,
+    "describe": true,
+    "expect": true,
+    "fit": true,
+    "fdescribe": true,
+    "global": true,
+    "it": true,
+    "jQuery": true,
+    "jasmine": true,
+    "module": true,
+    "node": true,
+    "process": true,
+    "-Promise": true,
+    "require": true,
+    "sinon": true,
+    "spyOn": true
+  },
+  "settings": {
+    "ecmascript": 6
+  },
+  "rules": {
+    "camelcase": 0,
+    "comma-dangle": 0,
+    "consistent-return": 0,
+    "dot-notation": 0,
+    "key-spacing": 0,
+    "new-cap": 0,
+    "no-alert": 0,
+    "no-empty": 0,
+    "no-loop-func": 0,
+    "no-extra-strict": 0,
+    "no-unused-vars": 1,
+    "no-multi-spaces": 0,
+    "no-new": 0,
+    "no-process-exit": 0,
+    "no-shadow": 0,
+    "no-trailing-spaces": 0,
+    "no-underscore-dangle": 0,
+    "no-unused-expressions": 0,
+    "quotes": 0,
+    "strict": 0
+  }
+}
