@@ -5,7 +5,7 @@ var msIf = require('..');
 
 var ran = function() {
   return function(files, metalsmith, done) {
-    metadata = metalsmith.metadata();
+    var metadata = metalsmith.metadata();
     metadata.ran = true;
     done();
   };
@@ -18,6 +18,7 @@ describe('metalsmith-if', function(){
         ran()
       ));
     m.build(function(err){
+      console.log(err);
       assert(exists('test/fixture/build'));
       assert(m.metadata().ran);
       done();
@@ -30,6 +31,7 @@ describe('metalsmith-if', function(){
         ran()
       ));
     m.build(function(err){
+      console.log(err);
       assert(exists('test/fixture/build'));
       assert(!m.metadata().ran);
       done();
