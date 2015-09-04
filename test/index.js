@@ -5,8 +5,7 @@ var msIf = require('..');
 
 var ran = function() {
   return function(files, metalsmith, done) {
-    var metadata = metalsmith.metadata();
-    metadata.ran = true;
+    metalsmith.metadata().ran = true;
     done();
   };
 };
@@ -14,11 +13,12 @@ var ran = function() {
 describe('metalsmith-if', function(){
   it('should pass through a function if the conditional is true', function(done){
     var m = Metalsmith('test/fixture')
-      .use(msIf(true,
+      .use(msIf(
+        true,
         ran()
       ));
     m.build(function(err){
-      console.log(err);
+      if (err) { console.log(err); }
       assert(exists('test/fixture/build'));
       assert(m.metadata().ran);
       done();
@@ -27,11 +27,30 @@ describe('metalsmith-if', function(){
 
   it('should not pass through a function if the conditional is false', function(done){
     var m = Metalsmith('test/fixture')
-      .use(msIf(false,
+      .use(msIf(
+        false,
         ran()
       ));
     m.build(function(err){
-      console.log(err);
+      if (err) { console.log(err); }
+      assert(exists('test/fixture/build'));
+      assert(!m.metadata().ran);
+      done();
+    });
+  });
+
+  var envTester = function(){
+    return false;
+  };
+
+  it('should accept a function as the conditional', function(done){
+    var m = Metalsmith('test/fixture')
+      .use(msIf(
+        envTester,
+        ran()
+      ));
+    m.build(function(err){
+      if (err) { console.log(err); }
       assert(exists('test/fixture/build'));
       assert(!m.metadata().ran);
       done();
