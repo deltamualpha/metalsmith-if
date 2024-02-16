@@ -1,7 +1,7 @@
 {
   "name": "metalsmith-if",
-  "version": "0.1.1",
-  "description": "A Metalsmith plugin that allows you to execute another plugin conditionally.",
+  "version": "1.0.0",
+  "description": "A Metalsmith plugin that allows you to include another plugin in the build pipeline conditionally.",
   "main": "lib/index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec"
@@ -24,10 +24,10 @@
   },
   "homepage": "https://github.com/deltamualpha/metalsmith-if",
   "dependencies": {
-    "debug": "^2.2.0"
+    "debug": "^4.3.4"
   },
   "devDependencies": {
-    "mocha": "1.x",
-    "metalsmith": "^1.7.0"
+    "mocha": "10.x",
+    "metalsmith": "^2.6.2"
   }
 }
