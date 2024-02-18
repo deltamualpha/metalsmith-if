@@ -1,3 +1,4 @@
 node_modules
 test/fixture/build
 metalsmith.log
+.nyc_output

@@ -18,6 +18,8 @@ describe("metalsmith-if", function () {
       if (err) return done(err);
       if (!exists("test/fixture/build"))
         return done(new Error("files not built"));
+      if (!exists("test/fixture/build/one.md"))
+        return done(new Error("files not copied"));
       if (!m.metadata().ran) return done(new Error("function not executed"));
       done();
     });
@@ -30,6 +32,8 @@ describe("metalsmith-if", function () {
       if (err) return done(err);
       if (!exists("test/fixture/build"))
         return done(new Error("files not built"));
+      if (!exists("test/fixture/build/one.md"))
+        return done(new Error("files not copied"));
       if (m.metadata().ran) return done(new Error("function executed"));
       done();
     });
@@ -42,6 +46,8 @@ describe("metalsmith-if", function () {
       if (err) return done(err);
       if (!exists("test/fixture/build"))
         return done(new Error("files not built"));
+      if (!exists("test/fixture/build/one.md"))
+        return done(new Error("files not copied"));
       if (m.metadata().ran) return done(new Error("function executed"));
       done();
     });
@@ -54,6 +60,8 @@ describe("metalsmith-if", function () {
       if (err) return done(err);
       if (!exists("test/fixture/build"))
         return done(new Error("files not built"));
+      if (!exists("test/fixture/build/one.md"))
+        return done(new Error("files not copied"));
       done();
     });
   });
@@ -68,6 +76,8 @@ describe("metalsmith-if", function () {
       if (err) return done(err);
       if (!exists("test/fixture/build"))
         return done(new Error("files not built"));
+      if (!exists("test/fixture/build/one.md"))
+        return done(new Error("files not copied"));
       if (!exists("test/fixture/metalsmith.log"))
         return done(new Error("log not created"));
       if (!read("test/fixture/metalsmith.log").includes("Skipping plugin."))
@@ -77,7 +87,7 @@ describe("metalsmith-if", function () {
     });
   });
 
-  it("supports CLI mode", function (done) {
+  it("supports CLI mode using a local plugin", function (done) {
     prep();
     var m = Metalsmith("test/fixture")
       .env("CLI", true)
@@ -88,11 +98,39 @@ describe("metalsmith-if", function () {
       if (err) return done(err);
       if (!exists("test/fixture/build"))
         return done(new Error("files not built"));
+      if (!exists("test/fixture/build/one.md"))
+        return done(new Error("files not copied"));
       if (!m.metadata().ran) return done(new Error("function not executed"));
       if (m.metadata().foo !== 0)
         return done(new Error("argument 1 not captured"));
       if (m.metadata().bar !== 1)
         return done(new Error("argument 2 not captured"));
+      done();
+    });
+  });
+
+  it("supports CLI mode using a node_modules plugin", function (done) {
+    prep();
+    var m = Metalsmith("test/fixture")
+      .env("CLI", true)
+      .use(msIf([true, "@metalsmith/markdown", {}]));
+    m.build(function (err, _) {
+      if (err) return done(err);
+      if (!exists("test/fixture/build"))
+        return done(new Error("files not built"));
+      if (!exists("test/fixture/build/one.html"))
+        return done(new Error("files not markdownified"));
+      done();
+    });
+  });
+
+  it("throws an error when it can't find the plugin", function (done) {
+    prep();
+    var m = Metalsmith("test/fixture")
+      .env("CLI", true)
+      .use(msIf([true, "foo/bar", {}]));
+    m.build(function (err, _) {
+      if (!err) return done("no error thrown");
       done();
     });
   });
