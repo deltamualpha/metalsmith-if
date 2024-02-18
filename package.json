@@ -24,7 +24,10 @@
   },
   "homepage": "https://github.com/deltamualpha/metalsmith-if",
   "devDependencies": {
-    "mocha": "10.x",
-    "metalsmith": "^2.6.2"
+    "metalsmith": "^2.6.2",
+    "mocha": "10.x"
+  },
+  "dependencies": {
+    "@metalsmith/markdown": "^1.10.0"
   }
 }

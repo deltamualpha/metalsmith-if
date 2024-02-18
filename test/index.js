@@ -3,11 +3,7 @@ var msIf = require("..");
 var exists = require("fs").existsSync;
 var rm = require("fs").rmSync;
 var read = require("fs").readFileSync;
-
-var f = (_, m, d) => {
-  m.metadata({ ran: true });
-  d();
-};
+var f = require("./metadata.js");
 
 var prep = () => {
   rm("test/fixture/build", { recursive: true, force: true });
@@ -17,7 +13,7 @@ var prep = () => {
 describe("metalsmith-if", function () {
   it("should pass through a function if the conditional is true", function (done) {
     prep();
-    var m = Metalsmith("test/fixture").use(msIf(true, f));
+    var m = Metalsmith("test/fixture").use(msIf(true, f()));
     m.build(function (err, _) {
       if (err) return done(err);
       if (!exists("test/fixture/build"))
@@ -29,7 +25,7 @@ describe("metalsmith-if", function () {
 
   it("should not pass through a function if the conditional is false", function (done) {
     prep();
-    var m = Metalsmith("test/fixture").use(msIf(false, f));
+    var m = Metalsmith("test/fixture").use(msIf(false, f()));
     m.build(function (err, _) {
       if (err) return done(err);
       if (!exists("test/fixture/build"))
@@ -41,7 +37,7 @@ describe("metalsmith-if", function () {
 
   it("should accept a function as the conditional", function (done) {
     prep();
-    var m = Metalsmith("test/fixture").use(msIf(() => false, f));
+    var m = Metalsmith("test/fixture").use(msIf(() => false, f()));
     m.build(function (err, _) {
       if (err) return done(err);
       if (!exists("test/fixture/build"))
@@ -51,12 +47,23 @@ describe("metalsmith-if", function () {
     });
   });
 
+  it("should do nothing if no callback is provided", function (done) {
+    prep();
+    var m = Metalsmith("test/fixture").use(msIf(true));
+    m.build(function (err, _) {
+      if (err) return done(err);
+      if (!exists("test/fixture/build"))
+        return done(new Error("files not built"));
+      done();
+    });
+  });
+
   it("logs when debug is set", function (done) {
     prep();
     var m = Metalsmith("test/fixture")
       .env("DEBUG", "metalsmith-if")
       .env("DEBUG_LOG", "metalsmith.log")
-      .use(msIf(false, f));
+      .use(msIf(false, f()));
     m.build(function (err, _) {
       if (err) return done(err);
       if (!exists("test/fixture/build"))
@@ -66,6 +73,26 @@ describe("metalsmith-if", function () {
       if (!read("test/fixture/metalsmith.log").includes("Skipping plugin."))
         return done(new Error("info not logged"));
       if (m.metadata().ran) return done(new Error("function executed"));
+      done();
+    });
+  });
+
+  it("supports CLI mode", function (done) {
+    prep();
+    var m = Metalsmith("test/fixture")
+      .env("CLI", true)
+      .use(
+        msIf([true, "metalsmith-if/test/metadata.js", { foo: 0 }, { bar: 1 }])
+      );
+    m.build(function (err, _) {
+      if (err) return done(err);
+      if (!exists("test/fixture/build"))
+        return done(new Error("files not built"));
+      if (!m.metadata().ran) return done(new Error("function not executed"));
+      if (m.metadata().foo !== 0)
+        return done(new Error("argument 1 not captured"));
+      if (m.metadata().bar !== 1)
+        return done(new Error("argument 2 not captured"));
       done();
     });
   });
